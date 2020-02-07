@@ -15,28 +15,37 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PORTAL_TEST_QT_H
-#define PORTAL_TEST_QT_H
+#ifndef LIBPORTALQT_RESPONSE_H
+#define LIBPORTALQT_RESPONSE_H
 
-#include <QMainWindow>
-#include "portal.h"
+#include <QVariantMap>
 
-class Ui_PortalTestQt;
+#include "libportalqt_export.h"
 
-class PortalTestQt : public QMainWindow
+namespace Xdp {
+
+class ResponsePrivate;
+
+class LIBPORTALQT_EXPORT Response
 {
-    Q_OBJECT
 public:
-    PortalTestQt(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
-    ~PortalTestQt();
+    explicit Response(bool success, const QString &errorMessage, const QVariantMap &result = QVariantMap());
+    ~Response();
 
-    void updateLastOpenedFile(const QString &file);
-private Q_SLOTS:
-    void onFileOpened(const Xdp::Response &response);
+    bool isError() const;
+
+    bool isSuccess() const;
+
+    QString errorMessage() const;
+
+    QVariantMap result() const;
 
 private:
-    Ui_PortalTestQt *m_mainWindow;
-    Xdp::Portal *m_portal;
-};
+    Q_DECLARE_PRIVATE(Response)
 
-#endif // PORTAL_TEST_QT_H
+    const QScopedPointer<ResponsePrivate> d_ptr;
+};
+} // namespace Xdp
+
+#endif // LIBPORTALQT_RESPONSE_H
+

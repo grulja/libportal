@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2020, Jan Grulich
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "portal-test-qt.h"
 #include "ui_portal-test-qt.h"
@@ -7,52 +23,45 @@
 PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
     : QMainWindow(parent, f)
     , m_mainWindow(new Ui_PortalTestQt)
-    , m_portal(xdp_portal_new())
+    , m_portal(new Xdp::Portal(this))
 {
     m_mainWindow->setupUi(this);
 
     connect(m_mainWindow->openFileButton, &QPushButton::clicked, [=] (bool clicked) {
-        XdpParent *parent;
-        XdpOpenFileFlags flags = XDP_OPEN_FILE_FLAG_NONE;
+        Xdp::Parent xdpParent(windowHandle());
+        Xdp::FileChooserFilterRule rule(Xdp::FileChooserFilterRule::Type::Mimetype, QStringLiteral("image/jpeg"));
+        Xdp::FileChooserFilterRule rule2(Xdp::FileChooserFilterRule::Type::Pattern, QStringLiteral("*.png"));
+        Xdp::FileChooserFilter filter(QStringLiteral("Images"), {rule, rule2});
+        Xdp::FileChooserChoice choice(QStringLiteral("choice-id"), QStringLiteral("choice-label"),
+                                      QMap<QString, QString>{{QStringLiteral("option1-id"), QStringLiteral("option1-value")}}, QStringLiteral("option1-id"));
 
-        parent = xdp_parent_new_qt(windowHandle());
-        xdp_portal_open_file (m_portal, parent, "Portal Test Qt", nullptr /*filters*/, nullptr /*current_filters*/,
-                              nullptr /*choices*/, flags, nullptr /*cancellable*/, openedFile, this);
-        xdp_parent_free (parent);
+        m_portal->openFile(xdpParent, QStringLiteral("Portal Test Qt"), {filter}, filter, {choice}, Xdp::OpenFileFlag::Multiple);
+        connect(m_portal, &Xdp::Portal::openFileResponse, this, &PortalTestQt::onFileOpened);
+    });
+    connect(m_mainWindow->saveFileButton, &QPushButton::clicked, [=] (bool clicked) {
+        Xdp::Parent xdpParent(windowHandle());
+        m_portal->saveFile(xdpParent, QStringLiteral("Portal Test Qt "), QStringLiteral("name.txt"), QStringLiteral("/tmp"), QStringLiteral("name_old.txt"),
+                           {}, Xdp::FileChooserFilter(), {}, Xdp::SaveFileFlag::None);
+    });
+    connect(m_mainWindow->saveFilesButton, &QPushButton::clicked, [=] (bool clicked) {
+        Xdp::Parent xdpParent(windowHandle());
+        m_portal->saveFiles(xdpParent, QStringLiteral("Portal Test Qt "), QStringLiteral("/tmp"), QStringList{QStringLiteral("foo.txt"), QStringLiteral("bar.txt")}, {}, Xdp::SaveFileFlag::None);
     });
 }
 
 PortalTestQt::~PortalTestQt()
 {
     delete m_mainWindow;
-    g_object_unref( m_portal);
+    delete m_portal;
 }
 
-void PortalTestQt::updateLastOpenedFile(const QString &file)
+void PortalTestQt::onFileOpened(const Xdp::Response &response)
 {
-    if (!file.isEmpty()) {
-        m_mainWindow->openedFileLabel->setText(QStringLiteral("Opened file: %1").arg(file));
-    } else {
-        m_mainWindow->openedFileLabel->setText(QStringLiteral("Failed to open a file!!!"));
-    }
-}
-
-void PortalTestQt::openedFile(GObject *object, GAsyncResult *result, gpointer data)
-{
-    Q_UNUSED(data);
-    XdpPortal *portal = XDP_PORTAL (object);
-    PortalTestQt *win = static_cast<PortalTestQt*>(data);
-    g_autoptr(GError) error = nullptr;
-    g_autoptr(GVariant) ret = nullptr;
-
-    ret = xdp_portal_open_file_finish(portal, result, &error);
-
-    if (ret) {
-        const char **uris;
-        if (g_variant_lookup(ret, "uris", "^a&s", &uris)) {
-            win->updateLastOpenedFile(uris[0]);
+    if (response.isSuccess()) {
+        QStringList uris = response.result().value(QStringLiteral("uris")).toStringList();
+        if (!uris.isEmpty()) {
+            Xdp::Parent xdpParent(windowHandle());
+            m_portal->openUri(xdpParent, uris.at(0), Xdp::OpenUriFlag::Ask);
         }
-    } else {
-            win->updateLastOpenedFile(QString());
     }
 }

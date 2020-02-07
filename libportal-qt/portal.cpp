@@ -15,28 +15,30 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PORTAL_TEST_QT_H
-#define PORTAL_TEST_QT_H
-
-#include <QMainWindow>
 #include "portal.h"
+#include "portal_p.h"
 
-class Ui_PortalTestQt;
+using namespace Xdp;
 
-class PortalTestQt : public QMainWindow
+PortalPrivate::PortalPrivate(Portal *q)
+    : m_xdpPortal(xdp_portal_new())
+    , q_ptr(q)
 {
-    Q_OBJECT
-public:
-    PortalTestQt(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
-    ~PortalTestQt();
+}
 
-    void updateLastOpenedFile(const QString &file);
-private Q_SLOTS:
-    void onFileOpened(const Xdp::Response &response);
+PortalPrivate::~PortalPrivate()
+{
+    if (m_xdpPortal) {
+        g_object_unref(m_xdpPortal);
+    }
+}
 
-private:
-    Ui_PortalTestQt *m_mainWindow;
-    Xdp::Portal *m_portal;
-};
+Portal::Portal(QObject *parent)
+    : QObject(parent)
+    , d_ptr(new PortalPrivate(this))
+{
+}
 
-#endif // PORTAL_TEST_QT_H
+Portal::~Portal()
+{
+}

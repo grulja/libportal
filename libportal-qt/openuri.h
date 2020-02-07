@@ -15,28 +15,19 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PORTAL_TEST_QT_H
-#define PORTAL_TEST_QT_H
+#ifndef LIBPORTALQT_OPENURI_H
+#define LIBPORTALQT_OPENURI_H
 
-#include <QMainWindow>
-#include "portal.h"
+namespace Xdp {
 
-class Ui_PortalTestQt;
-
-class PortalTestQt : public QMainWindow
+enum class OpenUriFlag
 {
-    Q_OBJECT
-public:
-    PortalTestQt(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
-    ~PortalTestQt();
-
-    void updateLastOpenedFile(const QString &file);
-private Q_SLOTS:
-    void onFileOpened(const Xdp::Response &response);
-
-private:
-    Ui_PortalTestQt *m_mainWindow;
-    Xdp::Portal *m_portal;
+    None = 0x0,
+    Ask = 0x1,
+    Writable = 0x2
 };
+Q_DECLARE_FLAGS(OpenUriFlags, OpenUriFlag)
+}
+Q_DECLARE_OPERATORS_FOR_FLAGS(Xdp::OpenUriFlags)
 
-#endif // PORTAL_TEST_QT_H
+#endif // LIBPORTALQT_OPENURI_H
