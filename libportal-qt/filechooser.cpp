@@ -284,9 +284,7 @@ static GVariant *filesToVariant(const QStringList &files)
     g_variant_builder_init(&builder, G_VARIANT_TYPE_BYTESTRING_ARRAY);
 
     for (const QString &file : files) {
-        QByteArray fileArray = QFile::encodeName(file).append('\0');
-        gpointer data = g_memdup(fileArray.data(), fileArray.length());
-        g_variant_builder_add(&builder, "@ay", g_variant_new_from_data(G_VARIANT_TYPE("ay"), data, fileArray.length(), false, g_free, data));
+        g_variant_builder_add(&builder, "@ay", g_variant_new_bytestring(file.toStdString().c_str()));
     }
 
     return g_variant_builder_end(&builder);
