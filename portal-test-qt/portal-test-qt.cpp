@@ -30,10 +30,14 @@ PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
     connect(m_mainWindow->openFileButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());
         Xdp::FileChooserFilterRule rule(Xdp::FileChooserFilterRule::Type::Mimetype, QStringLiteral("image/jpeg"));
-        Xdp::FileChooserFilterRule rule2(Xdp::FileChooserFilterRule::Type::Pattern, QStringLiteral("*.png"));
-        Xdp::FileChooserFilter filter(QStringLiteral("Images"), {rule, rule2});
+        Xdp::FileChooserFilterRule rule2;
+        rule2.setType(Xdp::FileChooserFilterRule::Type::Pattern);
+        rule2.setRule(QStringLiteral("*.png"));
+        Xdp::FileChooserFilter filter(QStringLiteral("Images"), {rule});
+        filter.addRule(rule2);
         Xdp::FileChooserChoice choice(QStringLiteral("choice-id"), QStringLiteral("choice-label"),
                                       QMap<QString, QString>{{QStringLiteral("option1-id"), QStringLiteral("option1-value")}}, QStringLiteral("option1-id"));
+        choice.addOption(QStringLiteral("option2-id"), QStringLiteral("option2-value"));
 
         m_portal->openFile(xdpParent, QStringLiteral("Portal Test Qt"), {filter}, filter, {choice}, Xdp::OpenFileFlag::Multiple);
         connect(m_portal, &Xdp::Portal::openFileResponse, this, &PortalTestQt::onFileOpened);

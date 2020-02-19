@@ -49,12 +49,18 @@ public:
         Mimetype = 1
     };
 
+    explicit FileChooserFilterRule();
     FileChooserFilterRule(Type type, const QString &rule);
     FileChooserFilterRule(const FileChooserFilterRule &other);
     ~FileChooserFilterRule();
 
+    bool isValid() const;
+
     Type type() const;
+    void setType(Type type);
+
     QString rule() const;
+    void setRule(const QString &rule);
 private:
     Q_DECLARE_PRIVATE(FileChooserFilterRule)
 
@@ -67,14 +73,18 @@ class FileChooserFilterPrivate;
 class LIBPORTALQT_EXPORT FileChooserFilter
 {
 public:
-    FileChooserFilter();
+    explicit FileChooserFilter();
     FileChooserFilter(const QString &label, const FileChooserFilterRules &rules);
     FileChooserFilter(const FileChooserFilter &other);
     ~FileChooserFilter();
 
-    bool isEmpty() const;
+    bool isValid() const;
+
     QString label() const;
+    void setLabel(const QString &label);
+
     FileChooserFilterRules rules() const;
+    void addRule(const FileChooserFilterRule &rule);
 private:
     Q_DECLARE_PRIVATE(FileChooserFilter)
 
@@ -87,14 +97,24 @@ class FileChooserChoicePrivate;
 class LIBPORTALQT_EXPORT FileChooserChoice
 {
 public:
+    explicit FileChooserChoice();
     FileChooserChoice(const QString &id, const QString &label, const QMap<QString, QString> &options, const QString &selected = QString());
     FileChooserChoice(const FileChooserChoice &other);
     ~FileChooserChoice();
 
+    bool isValid() const;
+
     QString id() const;
+    void setId(const QString &id);
+
     QString label() const;
+    void setLabel(const QString &label);
+
     QMap<QString, QString> options() const;
+    void addOption(const QString &id, const QString &label);
+
     QString selected() const;
+    void setSelected(const QString &selected);
 
 private:
     Q_DECLARE_PRIVATE(FileChooserChoice)

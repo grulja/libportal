@@ -29,13 +29,18 @@ namespace Xdp
 class FileChooserFilterRulePrivate
 {
 public:
+    FileChooserFilterRulePrivate();
     FileChooserFilterRulePrivate(FileChooserFilterRule::Type type, const QString &rule);
     FileChooserFilterRulePrivate(const FileChooserFilterRulePrivate &other);
     ~FileChooserFilterRulePrivate() { };
 
-    FileChooserFilterRule::Type m_type;
+    FileChooserFilterRule::Type m_type = FileChooserFilterRule::Type::Pattern;
     QString m_rule;
 };
+
+FileChooserFilterRulePrivate::FileChooserFilterRulePrivate()
+{
+}
 
 FileChooserFilterRulePrivate::FileChooserFilterRulePrivate(FileChooserFilterRule::Type type, const QString &rule)
     : m_type(type)
@@ -48,10 +53,16 @@ FileChooserFilterRulePrivate::FileChooserFilterRulePrivate(const FileChooserFilt
 {
 }
 
+FileChooserFilterRule::FileChooserFilterRule()
+    : d_ptr(new FileChooserFilterRulePrivate())
+{
+}
+
 FileChooserFilterRule::FileChooserFilterRule(FileChooserFilterRule::Type type, const QString &rule)
     : d_ptr(new FileChooserFilterRulePrivate(type, rule))
 {
 }
+
 
 FileChooserFilterRule::FileChooserFilterRule(const FileChooserFilterRule &other)
     : FileChooserFilterRule(other.type(), other.rule())
@@ -62,16 +73,34 @@ FileChooserFilterRule::~FileChooserFilterRule()
 {
 }
 
+bool FileChooserFilterRule::isValid() const
+{
+    Q_D(const FileChooserFilterRule);
+    return !d->m_rule.isEmpty();
+}
+
 FileChooserFilterRule::Type FileChooserFilterRule::type() const
 {
     Q_D(const FileChooserFilterRule);
     return d->m_type;
 }
 
+void FileChooserFilterRule::setType(FileChooserFilterRule::Type type)
+{
+    Q_D(FileChooserFilterRule);
+    d->m_type = type;
+}
+
 QString FileChooserFilterRule::rule() const
 {
     Q_D(const FileChooserFilterRule);
     return d->m_rule;
+}
+
+void FileChooserFilterRule::setRule(const QString &rule)
+{
+    Q_D(FileChooserFilterRule);
+    d->m_rule = rule;
 }
 
 class FileChooserFilterPrivate
@@ -116,10 +145,20 @@ FileChooserFilter::~FileChooserFilter()
 {
 }
 
-bool FileChooserFilter::isEmpty() const
+bool FileChooserFilter::isValid() const
 {
     Q_D(const FileChooserFilter);
-    return d->m_label.isEmpty() || d->m_rules.isEmpty();
+    if (d->m_label.isEmpty() || d->m_rules.isEmpty()) {
+        return false;
+    }
+
+    for (const FileChooserFilterRule &rule : d->m_rules) {
+        if (!rule.isValid()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 QString FileChooserFilter::label() const
@@ -128,15 +167,28 @@ QString FileChooserFilter::label() const
     return d->m_label;
 }
 
+void FileChooserFilter::setLabel(const QString &label)
+{
+    Q_D(FileChooserFilter);
+    d->m_label = label;
+}
+
 FileChooserFilterRules FileChooserFilter::rules() const
 {
     Q_D(const FileChooserFilter);
     return d->m_rules;
 }
 
+void FileChooserFilter::addRule(const FileChooserFilterRule &rule)
+{
+    Q_D(FileChooserFilter);
+    d->m_rules << rule;
+}
+
 class FileChooserChoicePrivate
 {
 public:
+    FileChooserChoicePrivate();
     FileChooserChoicePrivate(const QString &id, const QString &label, const QMap<QString, QString> &options, const QString &selected);
     FileChooserChoicePrivate(const FileChooserChoicePrivate &other);
     ~FileChooserChoicePrivate() { };
@@ -146,6 +198,10 @@ public:
     QMap<QString, QString> m_options;
     QString m_selected;
 };
+
+FileChooserChoicePrivate::FileChooserChoicePrivate()
+{
+}
 
 FileChooserChoicePrivate::FileChooserChoicePrivate(const QString &id, const QString &label, const QMap<QString, QString> &options, const QString &selected)
     : m_id(id)
@@ -157,6 +213,11 @@ FileChooserChoicePrivate::FileChooserChoicePrivate(const QString &id, const QStr
 
 FileChooserChoicePrivate::FileChooserChoicePrivate(const FileChooserChoicePrivate &other)
     : FileChooserChoicePrivate(other.m_id, other.m_label, other.m_options, other.m_selected)
+{
+}
+
+FileChooserChoice::FileChooserChoice()
+    : d_ptr(new FileChooserChoicePrivate())
 {
 }
 
@@ -174,10 +235,22 @@ FileChooserChoice::~FileChooserChoice()
 {
 }
 
+bool FileChooserChoice::isValid() const
+{
+    Q_D(const FileChooserChoice);
+    return !d->m_id.isEmpty() && !d->m_label.isEmpty() && !d->m_options.isEmpty();
+}
+
 QString FileChooserChoice::id() const
 {
     Q_D(const FileChooserChoice);
     return d->m_id;
+}
+
+void FileChooserChoice::setId(const QString &id)
+{
+    Q_D(FileChooserChoice);
+    d->m_id = id;
 }
 
 QString FileChooserChoice::label() const
@@ -186,16 +259,34 @@ QString FileChooserChoice::label() const
     return d->m_label;
 }
 
+void FileChooserChoice::setLabel(const QString &label)
+{
+    Q_D(FileChooserChoice);
+    d->m_label = label;
+}
+
 QMap<QString, QString> FileChooserChoice::options() const
 {
     Q_D(const FileChooserChoice);
     return d->m_options;
 }
 
+void FileChooserChoice::addOption(const QString &id, const QString &label)
+{
+    Q_D(FileChooserChoice);
+    d->m_options.insert(id, label);
+}
+
 QString FileChooserChoice::selected() const
 {
     Q_D(const FileChooserChoice);
     return d->m_selected;
+}
+
+void FileChooserChoice::setSelected(const QString& selected)
+{
+    Q_D(FileChooserChoice);
+    d->m_selected = selected;
 }
 
 void Portal::openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
@@ -293,7 +384,7 @@ static GVariant *filesToVariant(const QStringList &files)
 void PortalPrivate::openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
                              const FileChooserChoices &choices, OpenFileFlags flags)
 {
-    xdp_portal_open_file(m_xdpPortal, parent.d_ptr->m_xdpParent, title.toStdString().c_str(), filterListToVariant(filters), currentFilter.isEmpty() ? nullptr : filterToVariant(currentFilter),
+    xdp_portal_open_file(m_xdpPortal, parent.d_ptr->m_xdpParent, title.toStdString().c_str(), filterListToVariant(filters), currentFilter.isValid() ? filterToVariant(currentFilter) : nullptr,
                          choicesToVariant(choices), static_cast<XdpOpenFileFlags>((int)flags), nullptr /*cancellable*/, openedFile, this);
 }
 
@@ -302,7 +393,7 @@ void PortalPrivate::saveFile(const Parent &parent, const QString &title, const Q
 {
     xdp_portal_save_file(m_xdpPortal, parent.d_ptr->m_xdpParent, title.toStdString().c_str(),  currentName.toStdString().c_str(),
                          QFile::encodeName(currentFolder).append('\0'), QFile::encodeName(currentFile).append('\0'),
-                         filterListToVariant(filters), currentFilter.isEmpty() ? nullptr : filterToVariant(currentFilter),
+                         filterListToVariant(filters), currentFilter.isValid() ? filterToVariant(currentFilter) : nullptr,
                          choicesToVariant(choices), static_cast<XdpSaveFileFlags>((int)flags), nullptr /*cancellable*/, savedFile, this);
 }
 
