@@ -15,21 +15,20 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBPORTALQT_OPENURI_H
-#define LIBPORTALQT_OPENURI_H
+#ifndef LIBPORTALQT_ACCOUNT_H
+#define LIBPORTALQT_ACCOUNT_H
 
 #include <QFlags>
 
 namespace Xdp {
 
-enum class OpenUriFlag
+enum class UserInformationFlag
 {
-    None = 0x0,
-    Ask = 0x1,
-    Writable = 0x2
+    None = 0x0
 };
-Q_DECLARE_FLAGS(OpenUriFlags, OpenUriFlag)
+Q_DECLARE_FLAGS(UserInformationFlags, UserInformationFlag)
 }
-Q_DECLARE_OPERATORS_FOR_FLAGS(Xdp::OpenUriFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Xdp::UserInformationFlags)
 
-#endif // LIBPORTALQT_OPENURI_H
+#endif // LIBPORTALQT_ACCOUNT_H
+

@@ -34,12 +34,11 @@ public:
     PortalPrivate(Portal *q);
     ~PortalPrivate();
 
-    void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
-    static void openedUri(GObject *object, GAsyncResult *result, gpointer data);
+    // Account portal
+    void getUserInformation(const Parent &parent, const QString &reason, UserInformationFlags flags);
+    static void gotUserInformation(GObject *object, GAsyncResult *result, gpointer data);
 
-    void openDirectory(const Parent &parent, const QString &uri, OpenUriFlags flags);
-    static void openedDirectory(GObject *object, GAsyncResult *result, gpointer data);
-
+    // FileChooser portal
     void openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
                   const FileChooserChoices &choices, OpenFileFlags flags);
     static void openedFile(GObject *object, GAsyncResult *result, gpointer data);
@@ -51,6 +50,13 @@ public:
     void saveFiles(const Parent &parent, const QString &title, const QString &currentFolder, const QStringList &files,
                    const FileChooserChoices &choices, SaveFileFlags flags);
     static void savedFiles(GObject *object, GAsyncResult *result, gpointer data);
+
+    // OpenURI portal
+    void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
+    static void openedUri(GObject *object, GAsyncResult *result, gpointer data);
+
+    void openDirectory(const Parent &parent, const QString &uri, OpenUriFlags flags);
+    static void openedDirectory(GObject *object, GAsyncResult *result, gpointer data);
 
     XdpPortal *m_xdpPortal = nullptr;
 

@@ -20,8 +20,9 @@
 
 #include "libportalqt_export.h"
 
-#include <QStringList>
+#include <QFlags>
 #include <QMap>
+#include <QStringList>
 #include <QSharedPointer>
 
 namespace Xdp {

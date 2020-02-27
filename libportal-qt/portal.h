@@ -20,6 +20,7 @@
 
 #include <QObject>
 
+#include "account.h"
 #include "libportalqt_export.h"
 #include "filechooser.h"
 #include "openuri.h"
@@ -37,6 +38,10 @@ public:
     explicit Portal(QObject *parent = nullptr);
     ~Portal();
 
+    // Account portal
+    void getUserInformation(const Parent &parent, const QString &reason, UserInformationFlags flags);
+
+    // FileChooser portal
     void openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
                   const FileChooserChoices &choices, OpenFileFlags flags);
     void saveFile(const Parent &parent, const QString &title, const QString &currentName, const QString &currentFolder, const QString &currentFile,
@@ -44,15 +49,21 @@ public:
     void saveFiles(const Parent &parent, const QString &title, const QString &currentFolder, const QStringList &files,
                    const FileChooserChoices &choices, SaveFileFlags flags);
 
+    // OpenURI portal
     void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
     void openDirectory(const Parent &parent, const QString &uri, OpenUriFlags flags);
 Q_SIGNALS:
-    void openUriResponse(const Response &response);
-    void openDirectoryResponse(const Response &response);
+    // Account portal
+    void getUserInformationResponse(const Response &response);
 
+    // FileChooser portal
     void openFileResponse(const Response &response);
     void saveFileResponse(const Response &response);
     void saveFilesResponse(const Response &response);
+
+    // OpenURI portal
+    void openUriResponse(const Response &response);
+    void openDirectoryResponse(const Response &response);
 private:
     Q_DECLARE_PRIVATE(Portal)
 
