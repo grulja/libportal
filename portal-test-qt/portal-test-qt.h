@@ -32,6 +32,7 @@ public:
 
     void updateLastOpenedFile(const QString &file);
 private Q_SLOTS:
+    void onUserInformationReceived(const Xdp::Response &response);
     void onFileOpened(const Xdp::Response &response);
 
 private:

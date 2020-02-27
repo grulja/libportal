@@ -19,6 +19,9 @@
 #include "ui_portal-test-qt.h"
 
 #include <QStringLiteral>
+#include <QMessageBox>
+#include <QStandardPaths>
+#include <QUrl>
 
 PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
     : QMainWindow(parent, f)
@@ -27,6 +30,14 @@ PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
 {
     m_mainWindow->setupUi(this);
 
+    // Account portal
+    connect(m_mainWindow->getUserInformationButton, &QPushButton::clicked, [=] (bool clicked) {
+        Xdp::Parent xdpParent(windowHandle());
+        m_portal->getUserInformation(xdpParent, QStringLiteral("Testing libportal"), Xdp::UserInformationFlag::None);
+        connect(m_portal, &Xdp::Portal::getUserInformationResponse, this, &PortalTestQt::onUserInformationReceived);
+    });
+
+    // FileChooser portal
     connect(m_mainWindow->openFileButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());
         Xdp::FileChooserFilterRule rule(Xdp::FileChooserFilterRule::Type::Mimetype, QStringLiteral("image/jpeg"));
@@ -51,12 +62,34 @@ PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
         Xdp::Parent xdpParent(windowHandle());
         m_portal->saveFiles(xdpParent, QStringLiteral("Portal Test Qt "), QStringLiteral("/tmp"), QStringList{QStringLiteral("foo.txt"), QStringLiteral("bar.txt")}, {}, Xdp::SaveFileFlag::None);
     });
+
+    // OpenURI portal
+    connect(m_mainWindow->openLinkButton, &QPushButton::clicked, [=] (bool clicked) {
+        Xdp::Parent xdpParent(windowHandle());
+        m_portal->openUri(xdpParent, QStringLiteral("https://github.com/flatpak/libportal"), Xdp::OpenUriFlag::None);
+    });
+    connect(m_mainWindow->openDirectoryButton, &QPushButton::clicked, [=] (bool clicked) {
+        Xdp::Parent xdpParent(windowHandle());
+        m_portal->openDirectory(xdpParent, QUrl::fromLocalFile(QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first()).toDisplayString(), Xdp::OpenUriFlag::None);
+    });
 }
 
 PortalTestQt::~PortalTestQt()
 {
     delete m_mainWindow;
     delete m_portal;
+}
+
+void PortalTestQt::onUserInformationReceived(const Xdp::Response &response)
+{
+    if (response.isSuccess()) {
+
+        QString id = response.result().contains(QStringLiteral("id")) ? response.result().value(QStringLiteral("id")).toString() : QString();
+        QString name = response.result().contains(QStringLiteral("name")) ? response.result().value(QStringLiteral("name")).toString() : QString();
+        QString image = response.result().contains(QStringLiteral("image")) ? response.result().value(QStringLiteral("image")).toString() : QString();
+
+        QMessageBox::information(this, QStringLiteral("User Information"), QStringLiteral("User ID: %1 | User Name: %2 | User Picture: %3").arg(id).arg(name).arg(image));
+    }
 }
 
 void PortalTestQt::onFileOpened(const Xdp::Response &response)
