@@ -43,7 +43,7 @@ void PortalPrivate::openUri(const Parent &parent, const QString &uri, OpenUriFla
 
 void PortalPrivate::openDirectory(const Parent &parent, const QString &uri, Xdp::OpenUriFlags flags)
 {
-    xdp_portal_open_directory(m_xdpPortal, parent.d_ptr->m_xdpParent, uri.toStdString().c_str(), static_cast<XdpOpenUriFlags>((int)flags), nullptr, openedUri, this);
+    xdp_portal_open_directory(m_xdpPortal, parent.d_ptr->m_xdpParent, uri.toStdString().c_str(), static_cast<XdpOpenUriFlags>((int)flags), nullptr, openedDirectory, this);
 }
 
 void PortalPrivate::openedUri(GObject *object, GAsyncResult *result, gpointer data)
