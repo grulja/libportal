@@ -38,6 +38,10 @@ public:
     void getUserInformation(const Parent &parent, const QString &reason, UserInformationFlags flags);
     static void gotUserInformation(GObject *object, GAsyncResult *result, gpointer data);
 
+    // Background portal
+    void requestBackground(const Parent &parent, const QString &reason, const QStringList &commandline, BackgroundFlags flags);
+    static void requestedBackground(GObject *object, GAsyncResult *result, gpointer data);
+
     // FileChooser portal
     void openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
                   const FileChooserChoices &choices, OpenFileFlags flags);

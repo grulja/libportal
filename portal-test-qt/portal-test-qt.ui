@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>352</width>
+    <width>608</width>
     <height>450</height>
    </rect>
   </property>
@@ -108,7 +108,26 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="title">
+       <string>Background portal</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QPushButton" name="requestBackgroundButton">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>Request background</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
      <widget class="QLabel" name="label">
       <property name="text">
        <string>Some actions don't have any visible effect and can be only verified when using dbus-monitor.</string>

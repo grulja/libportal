@@ -7,6 +7,7 @@ qt5_dep = dependency('qt5', modules: ['Core', 'Gui', 'X11Extras'])
 
 src = [
     'account.cpp',
+    'background.cpp',
     'filechooser.cpp',
     'openuri.cpp',
     'parent.cpp',
@@ -16,6 +17,7 @@ src = [
 
 pub_headers = [
     'account.h',
+    'background.h',
     'filechooser.h',
     'libportalqt_export.h',
     'openuri.h',

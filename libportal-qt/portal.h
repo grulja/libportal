@@ -21,6 +21,7 @@
 #include <QObject>
 
 #include "account.h"
+#include "background.h"
 #include "libportalqt_export.h"
 #include "filechooser.h"
 #include "openuri.h"
@@ -41,6 +42,9 @@ public:
     // Account portal
     void getUserInformation(const Parent &parent, const QString &reason, UserInformationFlags flags);
 
+    // Background portal
+    void requestBackground(const Parent &parent, const QString &reason, const QStringList &commandline, BackgroundFlags flags);
+
     // FileChooser portal
     void openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
                   const FileChooserChoices &choices, OpenFileFlags flags);
@@ -55,6 +59,9 @@ public:
 Q_SIGNALS:
     // Account portal
     void getUserInformationResponse(const Response &response);
+
+    // Background portal
+    void requestBackgroundResponse(const Response &response);
 
     // FileChooser portal
     void openFileResponse(const Response &response);
