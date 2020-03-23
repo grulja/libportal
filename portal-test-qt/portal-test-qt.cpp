@@ -40,7 +40,7 @@ PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
     // Background portal
     connect(m_mainWindow->requestBackgroundButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());
-        QStringList commandline = {QStringLiteral("/usr/bin/portal-test-qt")};
+        QStringList commandline = {QStringLiteral("/usr/bin/portal-test-qt"), QStringLiteral("some parameter"), QStringLiteral("--some-option")};
         m_portal->requestBackground(xdpParent, QStringLiteral("Testing libportal"), commandline, Xdp::BackgroundFlag::Autostart);
         connect(m_portal, &Xdp::Portal::requestBackgroundResponse, this, [=] (const Xdp::Response &response) {
             if (response.isSuccess()) {
