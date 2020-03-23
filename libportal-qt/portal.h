@@ -22,6 +22,7 @@
 
 #include "account.h"
 #include "background.h"
+#include "camera.h"
 #include "libportalqt_export.h"
 #include "filechooser.h"
 #include "openuri.h"
@@ -45,6 +46,10 @@ public:
     // Background portal
     void requestBackground(const Parent &parent, const QString &reason, const QStringList &commandline, BackgroundFlags flags);
 
+    // Camera portal
+    void accessCamera(const Parent &parent, CameraFlags flags);
+    int openPipewireRemoteForCamera();
+
     // FileChooser portal
     void openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
                   const FileChooserChoices &choices, OpenFileFlags flags);
@@ -62,6 +67,9 @@ Q_SIGNALS:
 
     // Background portal
     void requestBackgroundResponse(const Response &response);
+
+    // Camera portal
+    void accessCameraResponse(const Response &response);
 
     // FileChooser portal
     void openFileResponse(const Response &response);

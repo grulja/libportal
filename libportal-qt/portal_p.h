@@ -42,6 +42,12 @@ public:
     void requestBackground(const Parent &parent, const QString &reason, const QStringList &commandline, BackgroundFlags flags);
     static void requestedBackground(GObject *object, GAsyncResult *result, gpointer data);
 
+    // Camera portal
+    void accessCamera(const Parent &parent, CameraFlags flags);
+    static void accessedCamera(GObject *object, GAsyncResult *result, gpointer data);
+
+    int openPipewireRemoteForCamera();
+
     // FileChooser portal
     void openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
                   const FileChooserChoices &choices, OpenFileFlags flags);

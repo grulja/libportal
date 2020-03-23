@@ -49,6 +49,12 @@ PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
         });
     });
 
+    // Camera portal
+    connect(m_mainWindow->accessCameraButton, &QPushButton::clicked, [=] (bool clicked) {
+        Xdp::Parent xdpParent(windowHandle());
+        m_portal->accessCamera(xdpParent, Xdp::CameraFlag::None);
+    });
+
     // FileChooser portal
     connect(m_mainWindow->openFileButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());

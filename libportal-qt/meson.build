@@ -8,16 +8,19 @@ qt5_dep = dependency('qt5', modules: ['Core', 'Gui', 'X11Extras'])
 src = [
     'account.cpp',
     'background.cpp',
+    'camera.cpp',
     'filechooser.cpp',
     'openuri.cpp',
     'parent.cpp',
     'portal.cpp',
-    'response.cpp'
+    'response.cpp',
+    portal_enums
 ]
 
 pub_headers = [
     'account.h',
     'background.h',
+    'camera.h',
     'filechooser.h',
     'libportalqt_export.h',
     'openuri.h',
