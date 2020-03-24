@@ -47,5 +47,5 @@ Portal::~Portal()
 
 bool Xdp::Portal::isSandboxed()
 {
-    return QFileInfo::exists(QStringLiteral("/flatpak-info")) || qEnvironmentVariableIsSet("SNAP");
+    return QFileInfo::exists(QStringLiteral("/.flatpak-info")) || qEnvironmentVariableIsSet("SNAP");
 }
