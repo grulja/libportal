@@ -61,6 +61,11 @@ public:
     // OpenURI portal
     void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
     void openDirectory(const Parent &parent, const QString &uri, OpenUriFlags flags);
+
+    // Helpers
+    // TODO: these might be moved to a different place
+    static bool isSandboxed();
+
 Q_SIGNALS:
     // Account portal
     void getUserInformationResponse(const Response &response);

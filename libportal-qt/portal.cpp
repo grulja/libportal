@@ -18,6 +18,8 @@
 #include "portal.h"
 #include "portal_p.h"
 
+#include <QFileInfo>
+
 using namespace Xdp;
 
 PortalPrivate::PortalPrivate(Portal *q)
@@ -41,4 +43,9 @@ Portal::Portal(QObject *parent)
 
 Portal::~Portal()
 {
+}
+
+bool Xdp::Portal::isSandboxed()
+{
+    return QFileInfo::exists(QStringLiteral("/flatpak-info")) || qEnvironmentVariableIsSet("SNAP");
 }
