@@ -55,6 +55,8 @@ public:
     FileChooserFilterRule(const FileChooserFilterRule &other);
     ~FileChooserFilterRule();
 
+    void operator=(const FileChooserFilterRule &other);
+
     bool isValid() const;
 
     Type type() const;
@@ -79,6 +81,8 @@ public:
     FileChooserFilter(const FileChooserFilter &other);
     ~FileChooserFilter();
 
+    void operator=(const FileChooserFilter &other);
+
     bool isValid() const;
 
     QString label() const;
@@ -102,6 +106,8 @@ public:
     FileChooserChoice(const QString &id, const QString &label, const QMap<QString, QString> &options, const QString &selected = QString());
     FileChooserChoice(const FileChooserChoice &other);
     ~FileChooserChoice();
+
+    void operator=(const FileChooserChoice &other);
 
     bool isValid() const;
 

@@ -73,6 +73,12 @@ FileChooserFilterRule::~FileChooserFilterRule()
 {
 }
 
+void FileChooserFilterRule::operator=(const FileChooserFilterRule &other)
+{
+    setRule(other.rule());
+    setType(other.type());
+}
+
 bool FileChooserFilterRule::isValid() const
 {
     Q_D(const FileChooserFilterRule);
@@ -143,6 +149,14 @@ FileChooserFilter::FileChooserFilter(const FileChooserFilter &other)
 
 FileChooserFilter::~FileChooserFilter()
 {
+}
+
+void FileChooserFilter::operator=(const FileChooserFilter &other)
+{
+    setLabel(other.label());
+    for (const FileChooserFilterRule &rule : other.rules()) {
+        addRule(rule);
+    }
 }
 
 bool FileChooserFilter::isValid() const
@@ -233,6 +247,18 @@ FileChooserChoice::FileChooserChoice(const FileChooserChoice &other)
 
 FileChooserChoice::~FileChooserChoice()
 {
+}
+
+void FileChooserChoice::operator=(const FileChooserChoice &other)
+{
+    setId(other.id());
+    setLabel(other.label());
+    setSelected(other.selected());
+
+    QMap<QString, QString>::iterator it = other.options().begin();
+    while (it != other.options().end()) {
+        addOption(it.value(), it.key());
+    }
 }
 
 bool FileChooserChoice::isValid() const
