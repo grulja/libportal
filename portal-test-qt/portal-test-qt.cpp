@@ -55,6 +55,18 @@ PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
         m_portal->accessCamera(xdpParent, Xdp::CameraFlag::None);
     });
 
+    // Email portal
+    connect(m_mainWindow->composeEmailButton, &QPushButton::clicked, [=] (bool clicked) {
+        Xdp::Parent xdpParent(windowHandle());
+        const QStringList addresses = {QStringLiteral("foo@bar.org"), QStringLiteral("bar@foo.org")};
+        const QStringList cc = {QStringLiteral("foo@bar.org"), QStringLiteral("bar@foo.org")};
+        const QStringList bcc = {QStringLiteral("foo@bar.org"), QStringLiteral("bar@foo.org")};
+        const QString subject = QStringLiteral("Hello");
+        const QString body = QStringLiteral("This is a portal test");
+
+        m_portal->composeEmail(xdpParent, addresses, cc, bcc, subject, body, QStringList(), Xdp::EmailFlag::None);
+    });
+
     // FileChooser portal
     connect(m_mainWindow->openFileButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());

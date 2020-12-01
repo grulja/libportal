@@ -23,6 +23,7 @@
 #include "account.h"
 #include "background.h"
 #include "camera.h"
+#include "email.h"
 #include "libportalqt_export.h"
 #include "filechooser.h"
 #include "openuri.h"
@@ -50,6 +51,11 @@ public:
     void accessCamera(const Parent &parent, CameraFlags flags);
     int openPipewireRemoteForCamera();
 
+    // Email portal
+    void composeEmail(const Parent &parent, const QStringList &addresses, const QStringList &cc,
+                      const QStringList &bcc, const QString &subject, const QString &body,
+                      const QStringList &attachments, EmailFlags flags);
+
     // FileChooser portal
     void openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
                   const FileChooserChoices &choices, OpenFileFlags flags);
@@ -75,6 +81,9 @@ Q_SIGNALS:
 
     // Camera portal
     void accessCameraResponse(const Response &response);
+
+    // Email portal
+    void composeEmailResponse(const Response &response);
 
     // FileChooser portal
     void openFileResponse(const Response &response);

@@ -53,7 +53,7 @@
       </layout>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="1" column="0" rowspan="2">
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
        <string>FileChooser portal</string>
@@ -99,42 +99,41 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <layout class="QVBoxLayout" name="verticalLayout_5">
-      <item>
-       <widget class="QGroupBox" name="groupBox_5">
-        <property name="title">
-         <string>Camera portal</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_6">
-         <item>
-          <widget class="QPushButton" name="accessCameraButton">
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="text">
-            <string>Access Camera</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
+     <widget class="QGroupBox" name="groupBox_5">
+      <property name="title">
+       <string>Camera portal</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QPushButton" name="accessCameraButton">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>Access Camera</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
-    <item row="2" column="0">
+    <item row="2" column="1">
+     <widget class="QGroupBox" name="groupBox_6">
+      <property name="title">
+       <string>Email portal</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QPushButton" name="composeEmailButton">
+         <property name="text">
+          <string>Compose email</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0">
      <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
        <string>OpenURI portal</string>
@@ -163,7 +162,20 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="0" colspan="2">
+    <item row="3" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>157</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="0" colspan="2">
      <widget class="QLabel" name="label">
       <property name="text">
        <string>Some actions don't have any visible effect and can be only verified when using dbus-monitor.</string>

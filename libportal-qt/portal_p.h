@@ -48,6 +48,12 @@ public:
 
     int openPipewireRemoteForCamera();
 
+    // Email
+    void composeEmail(const Parent &parent, const QStringList &addresses, const QStringList &cc,
+                      const QStringList &bcc, const QString &subject, const QString &body,
+                      const QStringList &attachments, EmailFlags flags);
+    static void composedEmail(GObject *object, GAsyncResult *result, gpointer data);
+
     // FileChooser portal
     void openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
                   const FileChooserChoices &choices, OpenFileFlags flags);
