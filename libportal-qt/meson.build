@@ -3,7 +3,7 @@ libportal_version = meson.project_version()
 
 add_languages('cpp', required : true)
 
-qt5_dep = dependency('qt5', modules: ['Core', 'Gui', 'X11Extras'])
+qt5_dep = dependency('qt5', modules: ['Core', 'Gui'])
 
 src = [
     'account.cpp',
@@ -55,6 +55,12 @@ libportalqt_dep = declare_dependency(sources: [src, pub_headers, priv_headers, m
                                      link_with: libportal)
 
 install_headers(pub_headers, subdir: 'LibPortalQt')
+
+pkgconfig.generate(libportalqt,
+  description: 'Qt portal API wrappers',
+  name: 'libportal-qt',
+  requires: [ qt5_dep ],
+)
 
 #
 # CMake support
