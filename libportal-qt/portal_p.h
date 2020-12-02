@@ -27,12 +27,12 @@
 namespace Xdp
 {
 
-class PortalPrivate : public QObject
+class PortalPrivate : public Xdp::Notifier
 {
     Q_OBJECT
 public:
-    PortalPrivate(Portal *q);
-    ~PortalPrivate();
+    PortalPrivate();
+    virtual ~PortalPrivate();
 
     // Account portal
     void getUserInformation(const Parent &parent, const QString &reason, UserInformationFlags flags);
@@ -73,11 +73,8 @@ public:
 
     void openDirectory(const Parent &parent, const QString &uri, OpenUriFlags flags);
     static void openedDirectory(GObject *object, GAsyncResult *result, gpointer data);
-
+private:
     XdpPortal *m_xdpPortal = nullptr;
-
-    Q_DECLARE_PUBLIC(Portal)
-    Portal *q_ptr;
 };
 }
 

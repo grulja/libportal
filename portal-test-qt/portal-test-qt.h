@@ -37,7 +37,6 @@ private Q_SLOTS:
 
 private:
     Ui_PortalTestQt *m_mainWindow;
-    Xdp::Portal *m_portal;
 };
 
 #endif // PORTAL_TEST_QT_H

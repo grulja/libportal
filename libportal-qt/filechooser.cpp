@@ -315,30 +315,6 @@ void FileChooserChoice::setSelected(const QString& selected)
     d->m_selected = selected;
 }
 
-void Portal::openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
-              const FileChooserChoices &choices, OpenFileFlags flags)
-{
-    Q_D(Portal);
-
-    d->openFile(parent, title, filters, currentFilter, choices, flags);
-}
-
-void Portal::saveFile(const Parent &parent, const QString &title, const QString &currentName, const QString &currentFolder, const QString &currentFile,
-                      const FileChooserFilterList &filters, const FileChooserFilter &currentFilter, const FileChooserChoices &choices, SaveFileFlags flags)
-{
-    Q_D(Portal);
-
-    d->saveFile(parent, title, currentName, currentFolder, currentFile, filters, currentFilter, choices, flags);
-}
-
-void Portal::saveFiles(const Parent &parent, const QString &title, const QString &currentFolder, const QStringList &files,
-                       const FileChooserChoices &choices, SaveFileFlags flags)
-{
-    Q_D(Portal);
-
-    d->saveFiles(parent, title, currentFolder, files, choices, flags);
-}
-
 static GVariant *filterToVariant(const FileChooserFilter &filter)
 {
     GVariantBuilder builder;
@@ -466,10 +442,10 @@ void PortalPrivate::openedFile(GObject *object, GAsyncResult *result, gpointer d
         responseData.insert(QStringLiteral("uris"), uriList);
 
         Response response(true, QString(), responseData);
-        portalPrivate->q_ptr->openFileResponse(response);
+        portalPrivate->openFileResponse(response);
     } else {
         Response response(false, error ? QString(error->message) : QString());
-        portalPrivate->q_ptr->openFileResponse(response);
+        portalPrivate->openFileResponse(response);
     }
 }
 
@@ -508,10 +484,10 @@ void PortalPrivate::savedFile(GObject *object, GAsyncResult *result, gpointer da
         responseData.insert(QStringLiteral("uris"), uriList);
 
         Response response(true, QString(), responseData);
-        portalPrivate->q_ptr->saveFileResponse(response);
+        portalPrivate->saveFileResponse(response);
     } else {
         Response response(false, error ? QString(error->message) : QString());
-        portalPrivate->q_ptr->saveFileResponse(response);
+        portalPrivate->saveFileResponse(response);
     }
 }
 
@@ -550,10 +526,10 @@ void PortalPrivate::savedFiles(GObject *object, GAsyncResult *result, gpointer d
         responseData.insert(QStringLiteral("uris"), uriList);
 
         Response response(true, QString(), responseData);
-        portalPrivate->q_ptr->saveFilesResponse(response);
+        portalPrivate->saveFilesResponse(response);
     } else {
         Response response(false, error ? QString(error->message) : QString());
-        portalPrivate->q_ptr->saveFilesResponse(response);
+        portalPrivate->saveFilesResponse(response);
     }
 }
 

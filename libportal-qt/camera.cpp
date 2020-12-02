@@ -22,13 +22,6 @@
 
 using namespace Xdp;
 
-void Portal::accessCamera(const Parent &parent, CameraFlags flags)
-{
-    Q_D(Portal);
-
-    d->accessCamera(parent, flags);
-}
-
 void PortalPrivate::accessCamera(const Parent &parent, CameraFlags flags)
 {
     xdp_portal_access_camera(m_xdpPortal, parent.d_ptr->m_xdpParent, static_cast<XdpCameraFlags>((int)flags), nullptr, accessedCamera, this);
@@ -43,14 +36,7 @@ void PortalPrivate::accessedCamera(GObject *object, GAsyncResult *result, gpoint
     bool ret = xdp_portal_access_camera_finish(xdpPortal, result, &error);
 
     Response response(ret, error ? QString(error->message) : QString());
-    portalPrivate->q_ptr->accessCameraResponse(response);
-}
-
-int Portal::openPipewireRemoteForCamera()
-{
-    Q_D(Portal);
-
-    return d->openPipewireRemoteForCamera();
+    portalPrivate->accessCameraResponse(response);
 }
 
 int PortalPrivate::openPipewireRemoteForCamera()

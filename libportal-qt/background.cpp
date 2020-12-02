@@ -22,13 +22,6 @@
 
 using namespace Xdp;
 
-void Portal::requestBackground(const Parent &parent, const QString &reason, const QStringList &commandline, BackgroundFlags flags)
-{
-    Q_D(Portal);
-
-    d->requestBackground(parent, reason, commandline, flags);
-}
-
 void PortalPrivate::requestBackground(const Parent &parent, const QString &reason, const QStringList &commandline, BackgroundFlags flags)
 {
     g_autoptr(GPtrArray) ptrArray = g_ptr_array_new();
@@ -50,5 +43,5 @@ void PortalPrivate::requestedBackground(GObject *object, GAsyncResult *result, g
 
     Response response(ret, error ? QString(error->message) : QString());
 
-    portalPrivate->q_ptr->requestBackgroundResponse(response);
+    portalPrivate->requestBackgroundResponse(response);
 }

@@ -22,19 +22,12 @@
 
 using namespace Xdp;
 
-void Portal::getUserInformation(const Parent &parent, const QString &reason, UserInformationFlags flags)
-{
-    Q_D(Portal);
-
-    d->getUserInformation(parent, reason, flags);
-}
-
-void PortalPrivate::getUserInformation(const Parent &parent, const QString &reason, UserInformationFlags flags)
+void Xdp::PortalPrivate::getUserInformation(const Parent &parent, const QString &reason, UserInformationFlags flags)
 {
     xdp_portal_get_user_information(m_xdpPortal, parent.d_ptr->m_xdpParent, reason.toStdString().c_str(), static_cast<XdpUserInformationFlags>((int)flags), nullptr, gotUserInformation, this);
 }
 
-void PortalPrivate::gotUserInformation(GObject *object, GAsyncResult *result, gpointer data)
+void Xdp::PortalPrivate::gotUserInformation(GObject *object, GAsyncResult *result, gpointer data)
 {
     XdpPortal *xdpPortal = XDP_PORTAL(object);
     PortalPrivate *portalPrivate = static_cast<PortalPrivate*>(data);
@@ -60,10 +53,10 @@ void PortalPrivate::gotUserInformation(GObject *object, GAsyncResult *result, gp
         }
 
         Response response(true, QString(), responseData);
-        portalPrivate->q_ptr->getUserInformationResponse(response);
+        Q_EMIT portalPrivate->getUserInformationResponse(response);
     } else {
         Response response(false, error ? QString(error->message) : QString());
-        portalPrivate->q_ptr->getUserInformationResponse(response);
+        Q_EMIT portalPrivate->getUserInformationResponse(response);
     }
 }
 

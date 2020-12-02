@@ -32,46 +32,9 @@
 
 namespace Xdp {
 
-class PortalPrivate;
-
-class LIBPORTALQT_EXPORT Portal : public QObject
+class LIBPORTALQT_EXPORT Notifier : public QObject
 {
     Q_OBJECT
-public:
-    explicit Portal(QObject *parent = nullptr);
-    ~Portal();
-
-    // Account portal
-    void getUserInformation(const Parent &parent, const QString &reason, UserInformationFlags flags);
-
-    // Background portal
-    void requestBackground(const Parent &parent, const QString &reason, const QStringList &commandline, BackgroundFlags flags);
-
-    // Camera portal
-    void accessCamera(const Parent &parent, CameraFlags flags);
-    int openPipewireRemoteForCamera();
-
-    // Email portal
-    void composeEmail(const Parent &parent, const QStringList &addresses, const QStringList &cc,
-                      const QStringList &bcc, const QString &subject, const QString &body,
-                      const QStringList &attachments, EmailFlags flags);
-
-    // FileChooser portal
-    void openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
-                  const FileChooserChoices &choices, OpenFileFlags flags);
-    void saveFile(const Parent &parent, const QString &title, const QString &currentName, const QString &currentFolder, const QString &currentFile,
-                  const FileChooserFilterList &filters, const FileChooserFilter &currentFilter, const FileChooserChoices &choices, SaveFileFlags flags);
-    void saveFiles(const Parent &parent, const QString &title, const QString &currentFolder, const QStringList &files,
-                   const FileChooserChoices &choices, SaveFileFlags flags);
-
-    // OpenURI portal
-    void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
-    void openDirectory(const Parent &parent, const QString &uri, OpenUriFlags flags);
-
-    // Helpers
-    // TODO: these might be moved to a different place
-    static bool isSandboxed();
-
 Q_SIGNALS:
     // Account portal
     void getUserInformationResponse(const Response &response);
@@ -93,11 +56,40 @@ Q_SIGNALS:
     // OpenURI portal
     void openUriResponse(const Response &response);
     void openDirectoryResponse(const Response &response);
-private:
-    Q_DECLARE_PRIVATE(Portal)
-
-    const QScopedPointer<PortalPrivate> d_ptr;
 };
+
+    // Account portal
+    LIBPORTALQT_EXPORT void getUserInformation(const Parent &parent, const QString &reason, UserInformationFlags flags);
+
+    // Background portal
+    LIBPORTALQT_EXPORT void requestBackground(const Parent &parent, const QString &reason, const QStringList &commandline, BackgroundFlags flags);
+
+    // Camera portal
+    LIBPORTALQT_EXPORT void accessCamera(const Parent &parent, CameraFlags flags);
+    LIBPORTALQT_EXPORT int openPipewireRemoteForCamera();
+
+    // Email portal
+    LIBPORTALQT_EXPORT void composeEmail(const Parent &parent, const QStringList &addresses, const QStringList &cc,
+                                         const QStringList &bcc, const QString &subject, const QString &body,
+                                         const QStringList &attachments, EmailFlags flags);
+
+    // FileChooser portal
+    LIBPORTALQT_EXPORT void openFile(const Parent &parent, const QString &title, const FileChooserFilterList &filters, const FileChooserFilter &currentFilter,
+                                     const FileChooserChoices &choices, OpenFileFlags flags);
+    LIBPORTALQT_EXPORT void saveFile(const Parent &parent, const QString &title, const QString &currentName, const QString &currentFolder, const QString &currentFile,
+                                     const FileChooserFilterList &filters, const FileChooserFilter &currentFilter, const FileChooserChoices &choices, SaveFileFlags flags);
+    LIBPORTALQT_EXPORT void saveFiles(const Parent &parent, const QString &title, const QString &currentFolder, const QStringList &files,
+                                      const FileChooserChoices &choices, SaveFileFlags flags);
+
+    // OpenURI portal
+    LIBPORTALQT_EXPORT void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
+    LIBPORTALQT_EXPORT void openDirectory(const Parent &parent, const QString &uri, OpenUriFlags flags);
+
+    // Helpers
+    // TODO: these might be moved to a different place
+    LIBPORTALQT_EXPORT bool isSandboxed();
+
+    LIBPORTALQT_EXPORT Notifier *notifier();
 } // namespace Xdp
 
 #endif // LIBPORTALQT_PORTAL_H

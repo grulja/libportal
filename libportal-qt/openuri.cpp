@@ -22,20 +22,6 @@
 
 using namespace Xdp;
 
-void Portal::openUri(const Parent &parent, const QString &uri, OpenUriFlags flags)
-{
-    Q_D(Portal);
-
-    d->openUri(parent, uri, flags);
-}
-
-void Portal::openDirectory(const Parent &parent, const QString &uri, OpenUriFlags flags)
-{
-    Q_D(Portal);
-
-    d->openDirectory(parent, uri, flags);
-}
-
 void PortalPrivate::openUri(const Parent &parent, const QString &uri, OpenUriFlags flags)
 {
     xdp_portal_open_uri(m_xdpPortal, parent.d_ptr->m_xdpParent, uri.toStdString().c_str(), static_cast<XdpOpenUriFlags>((int)flags), nullptr, openedUri, this);
@@ -56,7 +42,7 @@ void PortalPrivate::openedUri(GObject *object, GAsyncResult *result, gpointer da
 
     Response response(ret, error ? QString(error->message) : QString());
 
-    portalPrivate->q_ptr->openUriResponse(response);
+    portalPrivate->openUriResponse(response);
 }
 
 void PortalPrivate::openedDirectory(GObject *object, GAsyncResult *result, gpointer data)
@@ -69,5 +55,5 @@ void PortalPrivate::openedDirectory(GObject *object, GAsyncResult *result, gpoin
 
     Response response(ret, error ? QString(error->message) : QString());
 
-    portalPrivate->q_ptr->openDirectoryResponse(response);
+    portalPrivate->openDirectoryResponse(response);
 }

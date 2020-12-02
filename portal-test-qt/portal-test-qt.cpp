@@ -26,23 +26,22 @@
 PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
     : QMainWindow(parent, f)
     , m_mainWindow(new Ui_PortalTestQt)
-    , m_portal(new Xdp::Portal(this))
 {
     m_mainWindow->setupUi(this);
 
     // Account portal
     connect(m_mainWindow->getUserInformationButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());
-        m_portal->getUserInformation(xdpParent, QStringLiteral("Testing libportal"), Xdp::UserInformationFlag::None);
-        connect(m_portal, &Xdp::Portal::getUserInformationResponse, this, &PortalTestQt::onUserInformationReceived);
+        Xdp::getUserInformation(xdpParent, QStringLiteral("Testing libportal"), Xdp::UserInformationFlag::None);
+        connect(Xdp::notifier(), &Xdp::Notifier::getUserInformationResponse, this, &PortalTestQt::onUserInformationReceived);
     });
 
     // Background portal
     connect(m_mainWindow->requestBackgroundButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());
         QStringList commandline = {QStringLiteral("/usr/bin/portal-test-qt"), QStringLiteral("some parameter"), QStringLiteral("--some-option")};
-        m_portal->requestBackground(xdpParent, QStringLiteral("Testing libportal"), commandline, Xdp::BackgroundFlag::Autostart);
-        connect(m_portal, &Xdp::Portal::requestBackgroundResponse, this, [=] (const Xdp::Response &response) {
+        Xdp::requestBackground(xdpParent, QStringLiteral("Testing libportal"), commandline, Xdp::BackgroundFlag::Autostart);
+        connect(Xdp::notifier(), &Xdp::Notifier::requestBackgroundResponse, this, [=] (const Xdp::Response &response) {
             if (response.isSuccess()) {
                 QMessageBox::information(this, QStringLiteral("Background Portal"), QStringLiteral("This application will successfully autostart"));
             }
@@ -52,7 +51,7 @@ PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
     // Camera portal
     connect(m_mainWindow->accessCameraButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());
-        m_portal->accessCamera(xdpParent, Xdp::CameraFlag::None);
+        Xdp::accessCamera(xdpParent, Xdp::CameraFlag::None);
     });
 
     // Email portal
@@ -64,7 +63,7 @@ PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
         const QString subject = QStringLiteral("Hello");
         const QString body = QStringLiteral("This is a portal test");
 
-        m_portal->composeEmail(xdpParent, addresses, cc, bcc, subject, body, QStringList(), Xdp::EmailFlag::None);
+        Xdp::composeEmail(xdpParent, addresses, cc, bcc, subject, body, QStringList(), Xdp::EmailFlag::None);
     });
 
     // FileChooser portal
@@ -80,40 +79,38 @@ PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
                                       QMap<QString, QString>{{QStringLiteral("option1-id"), QStringLiteral("option1-value")}}, QStringLiteral("option1-id"));
         choice.addOption(QStringLiteral("option2-id"), QStringLiteral("option2-value"));
 
-        m_portal->openFile(xdpParent, QStringLiteral("Portal Test Qt"), {filter}, filter, {choice}, Xdp::OpenFileFlag::Multiple);
-        connect(m_portal, &Xdp::Portal::openFileResponse, this, &PortalTestQt::onFileOpened);
+        Xdp::openFile(xdpParent, QStringLiteral("Portal Test Qt"), {filter}, filter, {choice}, Xdp::OpenFileFlag::Multiple);
+        connect(Xdp::notifier(), &Xdp::Notifier::openFileResponse, this, &PortalTestQt::onFileOpened);
     });
     connect(m_mainWindow->saveFileButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());
-        m_portal->saveFile(xdpParent, QStringLiteral("Portal Test Qt "), QStringLiteral("name.txt"), QStringLiteral("/tmp"), QStringLiteral("name_old.txt"),
-                           {}, Xdp::FileChooserFilter(), {}, Xdp::SaveFileFlag::None);
+        Xdp::saveFile(xdpParent, QStringLiteral("Portal Test Qt "), QStringLiteral("name.txt"), QStringLiteral("/tmp"), QStringLiteral("name_old.txt"),
+                      {}, Xdp::FileChooserFilter(), {}, Xdp::SaveFileFlag::None);
     });
     connect(m_mainWindow->saveFilesButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());
-        m_portal->saveFiles(xdpParent, QStringLiteral("Portal Test Qt "), QStringLiteral("/tmp"), QStringList{QStringLiteral("foo.txt"), QStringLiteral("bar.txt")}, {}, Xdp::SaveFileFlag::None);
+        Xdp::saveFiles(xdpParent, QStringLiteral("Portal Test Qt "), QStringLiteral("/tmp"), QStringList{QStringLiteral("foo.txt"), QStringLiteral("bar.txt")}, {}, Xdp::SaveFileFlag::None);
     });
 
     // OpenURI portal
     connect(m_mainWindow->openLinkButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());
-        m_portal->openUri(xdpParent, QStringLiteral("https://github.com/flatpak/libportal"), Xdp::OpenUriFlag::None);
+        Xdp::openUri(xdpParent, QStringLiteral("https://github.com/flatpak/libportal"), Xdp::OpenUriFlag::None);
     });
     connect(m_mainWindow->openDirectoryButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());
-        m_portal->openDirectory(xdpParent, QUrl::fromLocalFile(QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first()).toDisplayString(), Xdp::OpenUriFlag::None);
+        Xdp::openDirectory(xdpParent, QUrl::fromLocalFile(QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first()).toDisplayString(), Xdp::OpenUriFlag::None);
     });
 }
 
 PortalTestQt::~PortalTestQt()
 {
     delete m_mainWindow;
-    delete m_portal;
 }
 
 void PortalTestQt::onUserInformationReceived(const Xdp::Response &response)
 {
     if (response.isSuccess()) {
-
         QString id = response.result().contains(QStringLiteral("id")) ? response.result().value(QStringLiteral("id")).toString() : QString();
         QString name = response.result().contains(QStringLiteral("name")) ? response.result().value(QStringLiteral("name")).toString() : QString();
         QString image = response.result().contains(QStringLiteral("image")) ? response.result().value(QStringLiteral("image")).toString() : QString();
@@ -128,7 +125,7 @@ void PortalTestQt::onFileOpened(const Xdp::Response &response)
         QStringList uris = response.result().value(QStringLiteral("uris")).toStringList();
         if (!uris.isEmpty()) {
             Xdp::Parent xdpParent(windowHandle());
-            m_portal->openUri(xdpParent, uris.at(0), Xdp::OpenUriFlag::Ask);
+            Xdp::openUri(xdpParent, uris.at(0), Xdp::OpenUriFlag::Ask);
         }
     }
 }

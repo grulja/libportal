@@ -24,15 +24,6 @@
 
 using namespace Xdp;
 
-void Portal::composeEmail(const Parent &parent, const QStringList &addresses, const QStringList &cc,
-                          const QStringList &bcc, const QString &subject, const QString &body,
-                          const QStringList &attachments, EmailFlags flags)
-{
-    Q_D(Portal);
-
-    d->composeEmail(parent, addresses, cc, bcc, subject, body, attachments, flags);
-}
-
 void PortalPrivate::composeEmail(const Parent &parent, const QStringList &addresses, const QStringList &cc,
                                  const QStringList &bcc, const QString &subject, const QString &body,
                                  const QStringList &attachments, EmailFlags flags)
@@ -83,5 +74,5 @@ void PortalPrivate::composedEmail(GObject *object, GAsyncResult *result, gpointe
     bool ret = xdp_portal_compose_email_finish(xdpPortal, result, &error);
 
     Response response(ret, error ? QString(error->message) : QString());
-    portalPrivate->q_ptr->composeEmailResponse(response);
+    portalPrivate->composeEmailResponse(response);
 }
