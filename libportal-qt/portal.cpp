@@ -25,6 +25,7 @@ Q_GLOBAL_STATIC(Xdp::PortalPrivate, globalPortal)
 Xdp::PortalPrivate::PortalPrivate()
     : m_xdpPortal(xdp_portal_new())
 {
+    g_signal_connect(m_xdpPortal, "session-state-changed", G_CALLBACK(onSessionStateChanged), this);
 }
 
 Xdp::PortalPrivate::~PortalPrivate()

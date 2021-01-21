@@ -79,4 +79,11 @@ void PortalPrivate::sessionMonitorQueryEndResponse()
     xdp_portal_session_monitor_query_end_response(m_xdpPortal);
 }
 
+void PortalPrivate::onSessionStateChanged(gboolean screenSaverActive, XdpLoginSessionState currentState, gpointer data)
+{
+    PortalPrivate *portalPrivate = static_cast<PortalPrivate*>(data);
+
+    portalPrivate->sessionStateChanged(screenSaverActive, static_cast<LoginSessionState>(currentState));
+}
+
 }

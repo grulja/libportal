@@ -75,6 +75,7 @@ public:
     static void sessionMonitorStarted(GObject *object, GAsyncResult *result, gpointer data);
     void sessionMonitorStop();
     void sessionMonitorQueryEndResponse();
+    static void onSessionStateChanged(gboolean screenSaverActive, XdpLoginSessionState currentState, gpointer data);
 
     // OpenURI portal
     void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);

@@ -61,6 +61,7 @@ Q_SIGNALS:
     // Inhibit portal
     void sessionInhibitResponse(const Response &response);
     void sessionMonitorStartResponse(const Response &response);
+    void sessionStateChanged(bool screenSaverActive, LoginSessionState currentState);
 };
 
     // Account portal
