@@ -26,6 +26,7 @@
 #include "email.h"
 #include "libportalqt_export.h"
 #include "filechooser.h"
+#include "inhibit.h"
 #include "openuri.h"
 #include "parent.h"
 #include "response.h"
@@ -56,6 +57,10 @@ Q_SIGNALS:
     // OpenURI portal
     void openUriResponse(const Response &response);
     void openDirectoryResponse(const Response &response);
+
+    // Inhibit portal
+    void sessionInhibitResponse(const Response &response);
+    void sessionMonitorStartResponse(const Response &response);
 };
 
     // Account portal
@@ -84,6 +89,13 @@ Q_SIGNALS:
     // OpenURI portal
     LIBPORTALQT_EXPORT void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
     LIBPORTALQT_EXPORT void openDirectory(const Parent &parent, const QString &uri, OpenUriFlags flags);
+
+    // Inhibit portal
+    LIBPORTALQT_EXPORT void sessionInhibit(const Parent &parent, const QString &reason, InhibitFlags flags);
+    LIBPORTALQT_EXPORT void sessionUninhibit(int id);
+    LIBPORTALQT_EXPORT void sessionMonitorStart(const Parent &parent, SessionMonitorFlags flags);
+    LIBPORTALQT_EXPORT void sessionMonitorStop();
+    LIBPORTALQT_EXPORT void sessionMonitorQueryEndResponse();
 
     // Helpers
     // TODO: these might be moved to a different place

@@ -67,6 +67,15 @@ public:
                    const FileChooserChoices &choices, SaveFileFlags flags);
     static void savedFiles(GObject *object, GAsyncResult *result, gpointer data);
 
+    // Inhibit portal
+    void sessionInhibit(const Parent &parent, const QString &reason, InhibitFlags flags);
+    static void sessionInhibited(GObject *object, GAsyncResult *result, gpointer data);
+    void sessionUninhibit(int id);
+    void sessionMonitorStart(const Parent &parent, SessionMonitorFlags flags);
+    static void sessionMonitorStarted(GObject *object, GAsyncResult *result, gpointer data);
+    void sessionMonitorStop();
+    void sessionMonitorQueryEndResponse();
+
     // OpenURI portal
     void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
     static void openedUri(GObject *object, GAsyncResult *result, gpointer data);

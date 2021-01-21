@@ -92,6 +92,17 @@ PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
         Xdp::saveFiles(xdpParent, QStringLiteral("Portal Test Qt "), QStringLiteral("/tmp"), QStringList{QStringLiteral("foo.txt"), QStringLiteral("bar.txt")}, {}, Xdp::SaveFileFlag::None);
     });
 
+    // Inhbit portal
+    connect(m_mainWindow->inhibitButton, &QPushButton::clicked, [=] (bool clicked) {
+        Xdp::Parent xdpParent(windowHandle());
+        Xdp::sessionInhibit(xdpParent, QStringLiteral("Portal-test: testing inhibit portal"), Xdp::InhibitFlag::Suspend);
+        connect(Xdp::notifier(), &Xdp::Notifier::sessionInhibitResponse, this, &PortalTestQt::onSessionInhibited);
+    });
+    connect(m_mainWindow->uninhibitButton, &QPushButton::clicked, [=] (bool clicked) {
+        Xdp::Parent xdpParent(windowHandle());
+        Xdp::sessionUninhibit(m_inhibitorId);
+    });
+
     // OpenURI portal
     connect(m_mainWindow->openLinkButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());
@@ -127,5 +138,12 @@ void PortalTestQt::onFileOpened(const Xdp::Response &response)
             Xdp::Parent xdpParent(windowHandle());
             Xdp::openUri(xdpParent, uris.at(0), Xdp::OpenUriFlag::Ask);
         }
+    }
+}
+
+void PortalTestQt::onSessionInhibited(const Xdp::Response &response)
+{
+    if (response.isSuccess()) {
+        m_inhibitorId = response.result().value(QStringLiteral("id")).toInt();
     }
 }

@@ -84,6 +84,32 @@ void Xdp::saveFiles(const Parent &parent, const QString &title, const QString &c
     globalPortal->saveFiles(parent, title, currentFolder, files, choices, flags);
 }
 
+// Inhibit portal
+void Xdp::sessionInhibit(const Xdp::Parent &parent, const QString &reason, Xdp::InhibitFlags flags)
+{
+    globalPortal->sessionInhibit(parent, reason, flags);
+}
+
+void Xdp::sessionUninhibit(int id)
+{
+    globalPortal->sessionUninhibit(id);
+}
+
+void Xdp::sessionMonitorStart(const Xdp::Parent &parent, Xdp::SessionMonitorFlags flags)
+{
+    globalPortal->sessionMonitorStart(parent, flags);
+}
+
+void Xdp::sessionMonitorStop()
+{
+    globalPortal->sessionMonitorStop();
+}
+
+void Xdp::sessionMonitorQueryEndResponse()
+{
+    globalPortal->sessionMonitorQueryEndResponse();
+}
+
 // OpenURI portal
 void Xdp::openUri(const Parent &parent, const QString &uri, OpenUriFlags flags)
 {
