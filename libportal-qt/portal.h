@@ -29,6 +29,7 @@
 #include "libportalqt_export.h"
 #include "filechooser.h"
 #include "inhibit.h"
+#include "location.h"
 #include "openuri.h"
 #include "parent.h"
 #include "response.h"
@@ -64,6 +65,10 @@ Q_SIGNALS:
     void sessionInhibitResponse(const Response &response);
     void sessionMonitorStartResponse(const Response &response);
     void sessionStateChanged(bool screenSaverActive, LoginSessionState currentState);
+
+    // Location portal
+    void locationMonitorStartResponse(const Response &response);
+    void locationUpdated(double latitude, double longitude, double altitude, double accuracy, double speed, double heading, const QString &description, qint64 timestamp_s, qint64 timestamp_ms);
 };
 
     // Account portal
@@ -100,8 +105,11 @@ Q_SIGNALS:
     LIBPORTALQT_EXPORT void sessionMonitorStop();
     LIBPORTALQT_EXPORT void sessionMonitorQueryEndResponse();
 
+    // Location portal
+    LIBPORTALQT_EXPORT void locationMonitorStart(const Parent &parent, uint distanceThreshold, uint timeThreshold, LocationAccuracy accuracy, LocationMonitorFlags flags);
+    LIBPORTALQT_EXPORT void locationMonitorStop();
+
     // Helpers
-    // TODO: these might be moved to a different place
     LIBPORTALQT_EXPORT bool isSandboxed();
 
     LIBPORTALQT_EXPORT Notifier *notifier();

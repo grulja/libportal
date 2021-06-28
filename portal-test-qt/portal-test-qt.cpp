@@ -104,6 +104,26 @@ PortalTestQt::PortalTestQt(QWidget *parent, Qt::WindowFlags f)
         Xdp::sessionUninhibit(m_inhibitorId);
     });
 
+    // Location portal
+    connect(m_mainWindow->startLocationMonitorButton, &QPushButton::clicked, [=] (bool clicked) {
+        Xdp::Parent xdpParent(windowHandle());
+        Xdp::locationMonitorStart(xdpParent, 5, 5, Xdp::LocationAccuracy::Exact, Xdp::LocationMonitorFlag::None);
+        connect(Xdp::notifier(), &Xdp::Notifier::locationMonitorStartResponse, this, [=] (const Xdp::Response &response) {
+            if (response.isSuccess()) {
+                QMessageBox::information(this, QStringLiteral("Location monitor"), QStringLiteral("Location monitor successfully started"));
+                connect(Xdp::notifier(), &Xdp::Notifier::locationUpdated, this, [=] (double latitude, double longitude, double altitude, double accuracy, double speed,
+                                                                                     double heading, QString description, qint64 timestamp_s, qint64 timestamp_ms) {
+                    QMessageBox::information(this, QStringLiteral("Location updated"),
+                                             QStringLiteral("Latitude: %1 | Longitude %2 | Altitude %3 | Accuracy %4 | Description %5 | Timestamp_s %6").arg(latitude).arg(longitude).arg(altitude).arg(accuracy).arg(description).arg(timestamp_s));
+                });
+            }
+        });
+    });
+    connect(m_mainWindow->stopLocationMonitorButton, &QPushButton::clicked, [=] (bool clicked) {
+        Xdp::Parent xdpParent(windowHandle());
+        Xdp::locationMonitorStop();
+    });
+
     // OpenURI portal
     connect(m_mainWindow->openLinkButton, &QPushButton::clicked, [=] (bool clicked) {
         Xdp::Parent xdpParent(windowHandle());

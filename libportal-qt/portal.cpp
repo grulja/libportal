@@ -28,6 +28,7 @@ Xdp::PortalPrivate::PortalPrivate()
     : m_xdpPortal(xdp_portal_new())
 {
     g_signal_connect(m_xdpPortal, "session-state-changed", G_CALLBACK(onSessionStateChanged), this);
+    g_signal_connect(m_xdpPortal, "location-updated", G_CALLBACK(onLocationUpdated), this);
 }
 
 Xdp::PortalPrivate::~PortalPrivate()
@@ -111,6 +112,17 @@ void Xdp::sessionMonitorStop()
 void Xdp::sessionMonitorQueryEndResponse()
 {
     globalPortal->sessionMonitorQueryEndResponse();
+}
+
+// Location portal
+void Xdp::locationMonitorStart(const Xdp::Parent& parent, uint distanceThreshold, uint timeThreshold, Xdp::LocationAccuracy accuracy, Xdp::LocationMonitorFlags flags)
+{
+    globalPortal->locationMonitorStart(parent, distanceThreshold, timeThreshold, accuracy, flags);
+}
+
+void Xdp::locationMonitorStop()
+{
+    globalPortal->locationMonitorStop();
 }
 
 // OpenURI portal

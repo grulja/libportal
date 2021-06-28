@@ -77,7 +77,14 @@ public:
     static void sessionMonitorStarted(GObject *object, GAsyncResult *result, gpointer data);
     void sessionMonitorStop();
     void sessionMonitorQueryEndResponse();
-    static void onSessionStateChanged(gboolean screenSaverActive, XdpLoginSessionState currentState, gpointer data);
+    static void onSessionStateChanged(XdpPortal *portal, gboolean screenSaverActive, XdpLoginSessionState currentState, gpointer data);
+
+    // Location portal
+    void locationMonitorStart(const Parent &parent, uint distanceThreshold, uint timeThreshold, LocationAccuracy accuracy,
+                              LocationMonitorFlags flags);
+    static void locationMonitorStarted(GObject *object, GAsyncResult *result, gpointer data);
+    void locationMonitorStop();
+    static void onLocationUpdated(XdpPortal *portal, double latitude, double longitude, double altitude, double accuracy, double speed, double heading, const char *description, qint64 timestamp_s, qint64 timestamp_ms,  gpointer data);
 
     // OpenURI portal
     void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
