@@ -29,6 +29,7 @@ Xdp::PortalPrivate::PortalPrivate()
 {
     g_signal_connect(m_xdpPortal, "session-state-changed", G_CALLBACK(onSessionStateChanged), this);
     g_signal_connect(m_xdpPortal, "location-updated", G_CALLBACK(onLocationUpdated), this);
+    g_signal_connect(m_xdpPortal, "notification-action-invoked", G_CALLBACK(onNotificationActionInvoked), this);
 }
 
 Xdp::PortalPrivate::~PortalPrivate()
@@ -115,7 +116,7 @@ void Xdp::sessionMonitorQueryEndResponse()
 }
 
 // Location portal
-void Xdp::locationMonitorStart(const Xdp::Parent& parent, uint distanceThreshold, uint timeThreshold, Xdp::LocationAccuracy accuracy, Xdp::LocationMonitorFlags flags)
+void Xdp::locationMonitorStart(const Xdp::Parent &parent, uint distanceThreshold, uint timeThreshold, Xdp::LocationAccuracy accuracy, Xdp::LocationMonitorFlags flags)
 {
     globalPortal->locationMonitorStart(parent, distanceThreshold, timeThreshold, accuracy, flags);
 }
@@ -123,6 +124,17 @@ void Xdp::locationMonitorStart(const Xdp::Parent& parent, uint distanceThreshold
 void Xdp::locationMonitorStop()
 {
     globalPortal->locationMonitorStop();
+}
+
+// Notification portal
+void Xdp::addNotification(const Xdp::Parent &parent, const QString &id, const QVariantMap &notification, Xdp::NotificationFlags flags)
+{
+    globalPortal->addNotification(parent, id, notification, flags);
+}
+
+void Xdp::removeNotification(const QString &id)
+{
+    globalPortal->removeNotification(id);
 }
 
 // OpenURI portal

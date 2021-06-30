@@ -22,7 +22,7 @@
 #include "parent.h"
 #include "parent_p.h"
 #include "portal_p.h"
-#include <QDebug>
+
 namespace Xdp
 {
 

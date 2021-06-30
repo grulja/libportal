@@ -86,6 +86,11 @@ public:
     void locationMonitorStop();
     static void onLocationUpdated(XdpPortal *portal, double latitude, double longitude, double altitude, double accuracy, double speed, double heading, const char *description, qint64 timestamp_s, qint64 timestamp_ms,  gpointer data);
 
+    void addNotification(const Parent &parent, const QString &id, const QVariantMap &notification, NotificationFlags flags);
+    static void notificationAdded(GObject *object, GAsyncResult *result, gpointer data);
+    void removeNotification(const QString &id);
+    static void onNotificationActionInvoked(XdpPortal *portal, const char *id, const char *actionName, GVariant *parameter, gpointer data);
+
     // OpenURI portal
     void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
     static void openedUri(GObject *object, GAsyncResult *result, gpointer data);

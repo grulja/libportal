@@ -4,11 +4,8 @@ option('build-libportal-qt', type: 'boolean', value: true,
 option('build-portal-test', type: 'boolean', value: false,
   description : 'Build the portal-test application')
 
-option('build-portal-test-qt', type: 'boolean', value: false,
+option('build-portal-test-qt', type: 'boolean', value: true,
   description: 'Build the portal-test-qt application')
 
 option('gtk_doc', type: 'boolean', value: true,
   description : 'Build API reference with gtk-doc')
-
-option('build-portal-test-qt', type: 'boolean', value: false,
-  description: 'Build the portal-test-qt application')

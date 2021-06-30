@@ -30,6 +30,7 @@
 #include "filechooser.h"
 #include "inhibit.h"
 #include "location.h"
+#include "notification.h"
 #include "openuri.h"
 #include "parent.h"
 #include "response.h"
@@ -57,10 +58,6 @@ Q_SIGNALS:
     void saveFileResponse(const Response &response);
     void saveFilesResponse(const Response &response);
 
-    // OpenURI portal
-    void openUriResponse(const Response &response);
-    void openDirectoryResponse(const Response &response);
-
     // Inhibit portal
     void sessionInhibitResponse(const Response &response);
     void sessionMonitorStartResponse(const Response &response);
@@ -69,6 +66,14 @@ Q_SIGNALS:
     // Location portal
     void locationMonitorStartResponse(const Response &response);
     void locationUpdated(double latitude, double longitude, double altitude, double accuracy, double speed, double heading, const QString &description, qint64 timestamp_s, qint64 timestamp_ms);
+
+    // Notification portal
+    void addNotificationResponse(const Response &response);
+    void notificationActionInvoked(const QString &id, const QString &actionName, const QVariant &parameter);
+
+    // OpenURI portal
+    void openUriResponse(const Response &response);
+    void openDirectoryResponse(const Response &response);
 };
 
     // Account portal
@@ -94,10 +99,6 @@ Q_SIGNALS:
     LIBPORTALQT_EXPORT void saveFiles(const Parent &parent, const QString &title, const QString &currentFolder, const QStringList &files,
                                       const FileChooserChoices &choices, SaveFileFlags flags);
 
-    // OpenURI portal
-    LIBPORTALQT_EXPORT void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
-    LIBPORTALQT_EXPORT void openDirectory(const Parent &parent, const QString &uri, OpenUriFlags flags);
-
     // Inhibit portal
     LIBPORTALQT_EXPORT void sessionInhibit(const Parent &parent, const QString &reason, InhibitFlags flags);
     LIBPORTALQT_EXPORT void sessionUninhibit(int id);
@@ -108,6 +109,14 @@ Q_SIGNALS:
     // Location portal
     LIBPORTALQT_EXPORT void locationMonitorStart(const Parent &parent, uint distanceThreshold, uint timeThreshold, LocationAccuracy accuracy, LocationMonitorFlags flags);
     LIBPORTALQT_EXPORT void locationMonitorStop();
+
+    // Notification portal
+    LIBPORTALQT_EXPORT void addNotification(const Parent &parent, const QString &id, const QVariantMap &notification, NotificationFlags flags);
+    LIBPORTALQT_EXPORT void removeNotification(const QString &id);
+
+    // OpenURI portal
+    LIBPORTALQT_EXPORT void openUri(const Parent &parent, const QString &uri, OpenUriFlags flags);
+    LIBPORTALQT_EXPORT void openDirectory(const Parent &parent, const QString &uri, OpenUriFlags flags);
 
     // Helpers
     LIBPORTALQT_EXPORT bool isSandboxed();
