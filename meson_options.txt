@@ -1,4 +1,11 @@
 option('portal-tests', type: 'array', choices: ['gtk3', 'gtk4', 'qt'], value: [],
   description : 'A list of portal tests to build')
+
+option('autotests', type: 'array', choices: ['qt'], value: [],
+description : 'A list of portal unit tests to build')
+
+option('libportal-qt', type: 'boolean', value: true,
+  description : 'Build the Qt bindings')
+
 option('gtk_doc', type: 'boolean', value: true,
   description : 'Build API reference with gtk-doc')
